@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CETAA — College of Engineering Trivandrum Alumni Association</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy: #1B2A4A;
+    --navy-deep: #121d35;
+    --paper: #F5F1E6;
+    --paper-shadow: #E8E2D0;
+    --gold: #C9A961;
+    --gold-bright: #D9BD7C;
+    --brick: #8B2E2E;
+    --ink: #2A2A28;
+    --line: rgba(27,42,74,0.18);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Source Sans 3', sans-serif;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--gold); color:var(--navy-deep);}
+
+  /* blueprint grid texture */
+  .blueprint-bg{
+    position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 64px 64px;
+    opacity:0.35;
+  }
+
+  a{color:inherit; text-decoration:none;}
+
+  .label{
+    font-family:'Space Grotesk', monospace;
+    font-size:11px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    font-weight:600;
+  }
+
+  h1,h2,h3{font-family:'Fraunces', serif; font-weight:600; line-height:1.05;}
+
+  /* ===== NAV ===== */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(245,241,230,0.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:1240px; margin:0 auto; padding:18px 32px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{display:flex; align-items:center; gap:12px;}
+  .brand-mark{
+    width:42px; height:42px; border-radius:50%;
+    border:2px solid var(--navy);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Grotesk', monospace; font-weight:700; font-size:13px;
+    color:var(--navy); background:var(--paper); flex-shrink:0;
+  }
+  .brand-name{font-family:'Fraunces', serif; font-weight:700; font-size:21px; color:var(--navy); letter-spacing:0.01em;}
+  .brand-sub{font-family:'Space Grotesk', monospace; font-size:10px; letter-spacing:0.08em; color:var(--brick); text-transform:uppercase; margin-top:1px;}
+
+  nav.links{display:flex; gap:36px; align-items:center;}
+  nav.links a{
+    font-family:'Space Grotesk', monospace; font-size:12.5px; letter-spacing:0.06em;
+    text-transform:uppercase; color:var(--navy); position:relative; padding:4px 0;
+  }
+  nav.links a::after{
+    content:''; position:absolute; left:0; bottom:0; height:2px; width:0;
+    background:var(--brick); transition:width 0.25s ease;
+  }
+  nav.links a:hover::after{width:100%;}
+  .nav-cta{
+    background:var(--navy); color:var(--paper) !important;
+    padding:10px 20px; border-radius:2px; font-weight:600 !important;
+  }
+  .nav-cta::after{display:none;}
+  .nav-cta:hover{background:var(--navy-deep);}
+  .menu-btn{display:none; background:none; border:none; cursor:pointer;}
+
+  /* ===== HERO ===== */
+  .hero{
+    max-width:1240px; margin:0 auto; padding:96px 32px 80px;
+    display:grid; grid-template-columns:1.1fr 0.9fr; gap:64px; align-items:center;
+  }
+  .est-tag{
+    display:inline-flex; align-items:center; gap:10px;
+    font-family:'Space Grotesk', monospace; font-size:12px; letter-spacing:0.12em;
+    color:var(--brick); text-transform:uppercase; margin-bottom:28px;
+  }
+  .est-tag .dash{width:28px; height:1px; background:var(--brick);}
+  .hero h1{
+    font-size:clamp(40px,5.2vw,72px); color:var(--navy); margin-bottom:24px;
+  }
+  .hero h1 em{font-style:italic; color:var(--brick); font-weight:500;}
+  .hero p.lead{
+    font-size:18px; line-height:1.65; color:#3a3a36; max-width:480px; margin-bottom:36px;
+  }
+  .hero-ctas{display:flex; gap:16px; flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--navy); color:var(--paper); padding:15px 28px;
+    font-family:'Space Grotesk', monospace; font-size:13px; letter-spacing:0.06em;
+    text-transform:uppercase; font-weight:600; border-radius:2px;
+    display:inline-flex; align-items:center; gap:10px; transition:all 0.2s ease;
+  }
+  .btn-primary:hover{background:var(--brick); transform:translateY(-1px);}
+  .btn-secondary{
+    border:1.5px solid var(--navy); color:var(--navy); padding:14px 28px;
+    font-family:'Space Grotesk', monospace; font-size:13px; letter-spacing:0.06em;
+    text-transform:uppercase; font-weight:600; border-radius:2px;
+    transition:all 0.2s ease;
+  }
+  .btn-secondary:hover{background:var(--navy); color:var(--paper);}
+
+  /* hero blueprint plate */
+  .hero-plate{
+    position:relative; aspect-ratio:1/1.05;
+    border:1.5px solid var(--navy); background:var(--navy);
+    border-radius:2px; overflow:hidden;
+  }
+  .hero-plate svg{width:100%; height:100%; display:block;}
+  .plate-caption{
+    position:absolute; bottom:0; left:0; right:0;
+    background:var(--navy); padding:14px 20px;
+    border-top:1px solid rgba(245,241,230,0.25);
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .plate-caption span{font-family:'Space Grotesk', monospace; font-size:10.5px; letter-spacing:0.08em; color:var(--gold-bright); text-transform:uppercase;}
+
+  /* ===== STAT STRIP ===== */
+  .stat-strip{
+    background:var(--navy); border-top:1px solid rgba(245,241,230,0.15); border-bottom:1px solid rgba(245,241,230,0.15);
+  }
+  .stat-inner{
+    max-width:1240px; margin:0 auto; padding:40px 32px;
+    display:grid; grid-template-columns:repeat(4,1fr);
+  }
+  .stat{padding:0 24px; border-left:1px solid rgba(245,241,230,0.15);}
+  .stat:first-child{border-left:none;}
+  .stat .num{font-family:'Fraunces', serif; font-size:38px; color:var(--gold-bright); font-weight:600;}
+  .stat .cap{font-family:'Space Grotesk', monospace; font-size:11px; letter-spacing:0.08em; color:rgba(245,241,230,0.7); text-transform:uppercase; margin-top:6px;}
+
+  /* ===== SECTION: LEGACY ===== */
+  section{max-width:1240px; margin:0 auto; padding:100px 32px;}
+  .section-head{display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:56px; gap:24px; flex-wrap:wrap;}
+  .section-head .label{color:var(--brick); margin-bottom:14px; display:block;}
+  .section-head h2{font-size:clamp(30px,3.4vw,46px); color:var(--navy); max-width:560px;}
+  .section-head p{max-width:340px; color:#55554f; line-height:1.6; font-size:15px;}
+
+  .legacy-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line);}
+  .legacy-card{background:var(--paper); padding:40px 32px;}
+  .legacy-card .yr{font-family:'Space Grotesk', monospace; color:var(--gold); font-size:13px; letter-spacing:0.08em; margin-bottom:18px; display:block;}
+  .legacy-card h3{font-size:22px; color:var(--navy); margin-bottom:14px;}
+  .legacy-card p{font-size:14.5px; line-height:1.65; color:#55554f;}
+
+  /* ===== PROGRAMS / SCHEMES ===== */
+  .scheme-section{background:var(--navy); color:var(--paper);}
+  .scheme-section .label{color:var(--gold-bright);}
+  .scheme-section h2{color:var(--paper);}
+  .scheme-section .section-head p{color:rgba(245,241,230,0.65);}
+  .scheme-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:28px;}
+  .scheme-card{
+    border:1px solid rgba(245,241,230,0.2); padding:36px 28px; border-radius:2px;
+    transition:border-color 0.25s ease, background 0.25s ease;
+  }
+  .scheme-card:hover{border-color:var(--gold); background:rgba(245,241,230,0.04);}
+  .scheme-card .ico{
+    width:48px; height:48px; border:1.5px solid var(--gold); border-radius:50%;
+    display:flex; align-items:center; justify-content:center; margin-bottom:24px;
+    font-family:'Fraunces', serif; font-weight:600; color:var(--gold-bright); font-size:18px;
+  }
+  .scheme-card h3{color:var(--paper); font-size:21px; margin-bottom:6px;}
+  .scheme-card .full-name{font-family:'Space Grotesk',monospace; font-size:11px; letter-spacing:0.05em; color:var(--gold-bright); text-transform:uppercase; margin-bottom:14px; display:block;}
+  .scheme-card p{font-size:14px; line-height:1.6; color:rgba(245,241,230,0.7);}
+
+  /* ===== CHAPTERS MAP STRIP ===== */
+  .chapters{padding-top:90px; padding-bottom:90px;}
+  .chapter-list{
+    display:flex; flex-wrap:wrap; gap:14px; margin-top:8px;
+  }
+  .chapter-pill{
+    border:1px solid var(--line); padding:10px 18px; border-radius:30px;
+    font-family:'Space Grotesk', monospace; font-size:12.5px; letter-spacing:0.03em;
+    color:var(--navy); background:rgba(255,255,255,0.4);
+    transition:all 0.2s ease;
+  }
+  .chapter-pill:hover{background:var(--navy); color:var(--paper); border-color:var(--navy);}
+
+  /* ===== NEWS ===== */
+  .news-grid{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:0; border-top:1px solid var(--line);}
+  .news-item{padding:30px 0; border-bottom:1px solid var(--line); padding-right:32px;}
+  .news-item:not(:last-child){border-right:1px solid var(--line);}
+  .news-item .date{font-family:'Space Grotesk', monospace; font-size:11px; color:var(--brick); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:14px; display:block;}
+  .news-item h3{font-size:19px; color:var(--navy); line-height:1.3; margin-bottom:10px;}
+  .news-item p{font-size:14px; color:#55554f; line-height:1.6;}
+
+  /* ===== JUBILEE CALLOUT BANNER ===== */
+  .jubilee-banner{
+    background:linear-gradient(120deg, var(--brick), #6e2424);
+    color:var(--paper); border-radius:2px; position:relative; overflow:hidden;
+    padding:56px 56px; display:flex; align-items:center; justify-content:space-between; gap:40px;
+  }
+  .jubilee-banner::before{
+    content:''; position:absolute; right:-60px; top:-60px; width:240px; height:240px;
+    border:1px solid rgba(245,241,230,0.18); border-radius:50%;
+  }
+  .jubilee-banner::after{
+    content:''; position:absolute; right:20px; bottom:-90px; width:200px; height:200px;
+    border:1px solid rgba(245,241,230,0.12); border-radius:50%;
+  }
+  .jubilee-banner .label{color:var(--gold-bright);}
+  .jubilee-banner h2{color:var(--paper); font-size:clamp(26px,3vw,38px); max-width:480px; margin-top:10px;}
+  .jubilee-banner .btn-primary{background:var(--paper); color:var(--brick);}
+  .jubilee-banner .btn-primary:hover{background:var(--gold-bright); color:var(--navy-deep);}
+
+  /* ===== FOOTER ===== */
+  footer{background:var(--navy-deep); color:rgba(245,241,230,0.7); padding:64px 32px 32px;}
+  .footer-inner{max-width:1240px; margin:0 auto;}
+  .footer-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:48px; padding-bottom:48px; border-bottom:1px solid rgba(245,241,230,0.12);}
+  .footer-grid h4{font-family:'Space Grotesk', monospace; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--gold-bright); margin-bottom:20px;}
+  .footer-grid p, .footer-grid a{font-size:14px; line-height:1.8; color:rgba(245,241,230,0.65); display:block;}
+  .footer-grid a:hover{color:var(--gold-bright);}
+  .footer-brand{font-family:'Fraunces', serif; font-size:24px; color:var(--paper); margin-bottom:14px;}
+  .footer-bottom{
+    display:flex; justify-content:space-between; padding-top:28px; font-size:12.5px;
+    font-family:'Space Grotesk', monospace; letter-spacing:0.03em; flex-wrap:wrap; gap:12px;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  [data-reveal]{opacity:0; transform:translateY(24px); transition:opacity 0.7s ease, transform 0.7s ease;}
+  [data-reveal].is-visible{opacity:1; transform:translateY(0);}
+
+  @media (max-width:900px){
+    .hero{grid-template-columns:1fr; padding-top:48px;}
+    .stat-inner{grid-template-columns:repeat(2,1fr); gap:24px;}
+    .stat{border-left:none; padding:0;}
+    .legacy-grid{grid-template-columns:1fr;}
+    .scheme-grid{grid-template-columns:1fr;}
+    .news-grid{grid-template-columns:1fr;}
+    .news-item{border-right:none !important;}
+    .footer-grid{grid-template-columns:1fr 1fr; gap:32px;}
+    nav.links{position:fixed; top:74px; left:0; right:0; background:var(--paper); flex-direction:column; padding:24px 32px; gap:20px; border-bottom:1px solid var(--line); display:none;}
+    nav.links.open{display:flex;}
+    .menu-btn{display:block;}
+    .jubilee-banner{flex-direction:column; align-items:flex-start; padding:40px 28px;}
+  }
+  @media (max-width:600px){
+    .nav-inner{padding:14px 20px;}
+    .hero{padding:40px 20px 56px;}
+    section{padding:64px 20px;}
+    .jubilee-banner{padding:32px 22px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    [data-reveal]{opacity:1; transform:none; transition:none;}
+    html{scroll-behavior:auto;}
+  }
+  .slide-title{
+    animation:slideUp 1.5s ease-out;
+}
+
+@keyframes slideUp{
+    from{
+        transform:translateY(60px);
+        opacity:0;
+    }
+
+    to{
+        transform:translateY(0);
+        opacity:1;
+    }
+}
+</style>
+</head>
+<body>
+<div class="blueprint-bg"></div>
+
+<header>
+  <div class="nav-inner">
+    <div class="brand">
+      <img src="logo.png" alt="CETAA Logo" class="brand-logo">
+      
+      <div>
+        
+        <div class="brand-name">CETAA</div>
+        <div class="brand-sub">Est. 1976 · CET 1939</div>
+      </div>
+    </div>
+    <nav class="links" id="navLinks">
+      <a href="#legacy">Legacy</a>
+      <a href="#schemes">Schemes</a>
+      <a href="#chapters">Chapters</a>
+      <a href="#news">Newsroom</a>
+      <a href="jubilee.html">Diamond Jubilee Hall</a>
+      <a href="#" class="nav-cta">Join CETAA</a>
+    </nav>
+    <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B2A4A" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</header>
+
+<section class="hero" style="padding-top:72px;">
+  <div data-reveal>
+    <div class="est-tag"><span class="dash"></span>College of Engineering Trivandrum · Since 1939</div>
+    <h1>Eighty-seven years of <em>building</em> engineers.<br>One alma mater.</h1>
+    <p class="lead">CETAA connects more than 47,000 alumni across twenty chapters worldwide — sustaining the students, traditions, and institution that shaped us all.</p>
+    <div class="hero-ctas">
+      <a href="jubilee.html" class="btn-primary">Support the Jubilee Hall →</a>
+      <a href="#legacy" class="btn-secondary">Our Story</a>
+    </div>
+  </div>
+ <div class="hero-plate" data-reveal>
+
+    <img src="college.jpg"
+         alt="College of Engineering Trivandrum"
+         style="width:100%;
+                height:100%;
+                object-fit:cover;
+                display:block;">
+
+    <div class="plate-caption">
+      <span>Plate 01 / Estd. 1939</span>
+      <span>CETAA Archive</span>
+    </div>
+
+</div>
+
+
+
+
+    </div>
+
+    </div>
+
+</div>
+    
+      
+    </div>
+  </div>
+</section>
+
+<div class="stat-strip">
+  <div class="stat-inner">
+    <div class="stat" data-reveal>
+      <div class="num">47,000+</div>
+      <div class="cap">Registered Alumni</div>
+    </div>
+    <div class="stat" data-reveal>
+      <div class="num">20</div>
+      <div class="cap">Chapters Worldwide</div>
+    </div>
+    <div class="stat" data-reveal>
+      <div class="num">1976</div>
+      <div class="cap">Association Founded</div>
+    </div>
+    <div class="stat" data-reveal>
+      <div class="num">300+</div>
+      <div class="cap">GEMS Scholars Supported</div>
+    </div>
+  </div>
+</div>
+
+<section id="legacy">
+  <div class="section-head" data-reveal>
+    <div>
+      <span class="label">Foundation</span>
+      <h2 class="slide-title">Built by engineers, sustained by alumni.</h2>
+    </div>
+    <p>From a single brainstorming meeting at the Trivandrum Club to a global network spanning twenty chapters — the CETAA story, in three chapters.</p>
+  </div>
+  <div class="legacy-grid" data-reveal>
+    <div class="legacy-card">
+      <span class="yr">1939</span>
+      <h3>The College</h3>
+      <p>CET opens as Travancore's first engineering college, with three branches — Civil, Mechanical and Electrical — and eighteen students in each.</p>
+    </div>
+    <div class="legacy-card">
+      <span class="yr">1976</span>
+      <h3>The Association</h3>
+      <p>Dr. R. Ravikumar convenes the first brainstorming meeting; CETAA's bye-laws are passed at the inaugural General Body Meeting that December.</p>
+    </div>
+    <div class="legacy-card">
+      <span class="yr">Today</span>
+      <h3>The Network</h3>
+      <p>47,000 members across 20 chapters worldwide, sustaining scholarships, mentorship, and the campus that shaped every one of us.</p>
+    </div>
+  </div>
+</section>
+
+<section class="scheme-section" id="schemes">
+  <div class="section-head" data-reveal>
+    <div>
+      <span class="label">Giving Back</span>
+      <h2>Three schemes. One purpose — no CETian left behind.</h2>
+    </div>
+    <p>Alumni-funded support for students who need it most, sustained year after year by contributions from across the world.</p>
+  </div>
+  <div class="scheme-grid" data-reveal>
+    <div class="scheme-card">
+      <div class="ico">G</div>
+      <span class="full-name">Growing Engineers Monetary Support</span>
+      <h3>GEMS</h3>
+      <p>Annual scholarships for meritorious and needy students — born out of the CETAA Global Meet in Dubai, 2010.</p>
+    </div>
+    <div class="scheme-card">
+      <div class="ico">C</div>
+      <span class="full-name">Continuous Assistance for Rising Engineers</span>
+      <h3>CARE</h3>
+      <p>Sustained financial assistance through a student's full course of study at CET, year on year.</p>
+    </div>
+    <div class="scheme-card">
+      <div class="ico">H</div>
+      <span class="full-name">Helping Outstanding Pupils in Education</span>
+      <h3>HOPE Plus</h3>
+      <p>Led by the UAE chapter, supporting school, college and professional students beyond CET alone.</p>
+    </div>
+  </div>
+</section>
+
+<section class="chapters" id="chapters">
+  <div class="section-head" data-reveal>
+    <div>
+      <span class="label">Worldwide</span>
+      <h2>Twenty chapters. One alma mater.</h2>
+    </div>
+    <p>From Trivandrum to Toronto — CETians gather, mentor, and give back wherever they've landed.</p>
+  </div>
+  <div class="chapter-list" data-reveal>
+    <span class="chapter-pill">Trivandrum</span>
+    <span class="chapter-pill">Kochi</span>
+    <span class="chapter-pill">Bangalore</span>
+    <span class="chapter-pill">Chennai</span>
+    <span class="chapter-pill">Delhi NCR</span>
+    <span class="chapter-pill">Mumbai</span>
+    <span class="chapter-pill">UAE</span>
+    <span class="chapter-pill">Kuwait</span>
+    <span class="chapter-pill">Saudi Arabia</span>
+    <span class="chapter-pill">Qatar</span>
+    <span class="chapter-pill">Bahrain</span>
+    <span class="chapter-pill">UK</span>
+    <span class="chapter-pill">USA — East</span>
+    <span class="chapter-pill">USA — West / California</span>
+    <span class="chapter-pill">Canada</span>
+    <span class="chapter-pill">Australia</span>
+    <span class="chapter-pill">Singapore</span>
+    <span class="chapter-pill">+ 4 more chapters</span>
+  </div>
+</section>
+
+<section id="news">
+  <div class="section-head" data-reveal>
+    <div>
+      <span class="label">Newsroom</span>
+      <h2>From the alumni community</h2>
+    </div>
+    <p>Recognitions, milestones, and gatherings from CETians around the world.</p>
+  </div>
+  <div class="news-grid" data-reveal>
+    <div class="news-item">
+      <span class="date">Apr 2026</span>
+      <h3>Annual CETAA Awards &amp; GEMS Distribution Ceremony</h3>
+      <p>The President and Secretary cordially invite alumni to the Annual Awards and GEMS Scholarship Distribution Ceremony at CETAA Hall.</p>
+    </div>
+    <div class="news-item">
+      <span class="date">UPSC CSE 2025</span>
+      <h3>Three CETians clear the Civil Services Examination</h3>
+      <p>Hearty congratulations to our alumni for their outstanding rank in the UPSC Civil Services Examination — a proud moment for the CETAA family.</p>
+    </div>
+    <div class="news-item">
+      <span class="date">Appointment</span>
+      <h3>Alumna appointed Vice Chancellor</h3>
+      <p>A CET alumna from the Electronics &amp; Communication batch has been appointed Honorary Vice Chancellor of a Kerala technological university.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="jubilee-banner" data-reveal>
+    <div>
+      <span class="label">Diamond Jubilee Hall — Renovation Appeal</span>
+      <h2>The hall that hosted our first General Body Meeting needs us now.</h2>
+    </div>
+    <a href="jubilee.html" class="btn-primary">View the Renovation Plan →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">CETAA</div>
+        <p>College of Engineering Trivandrum<br>Alumni Association<br>Thiruvananthapuram, Kerala 695016</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="#legacy">Our Legacy</a>
+        <a href="#schemes">Scholarship Schemes</a>
+        <a href="#chapters">Global Chapters</a>
+        <a href="#news">Newsroom</a>
+      </div>
+      <div>
+        <h4>Get Involved</h4>
+        <a href="jubilee.html">Diamond Jubilee Hall</a>
+        <a href="#">Become a Member</a>
+        <a href="#">Mentor a Student</a>
+        <a href="#">Volunteer</a>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <a href="mailto:secretary@cetaa.com">secretary@cetaa.com</a>
+        <a href="#">+91 62380 71274</a>
+        <a href="#">CET Campus, Trivandrum</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 CETAA — College of Engineering Trivandrum Alumni Association</span>
+      <span>Website prototype · Student Intern Task</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const menuBtn = document.getElementById('menuBtn');
+  const navLinks = document.getElementById('navLinks');
+  menuBtn.addEventListener('click', () => navLinks.classList.toggle('open'));
+
+  const revealEls = document.querySelectorAll('[data-reveal]');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('is-visible'); obs.unobserve(e.target); } });
+  }, {threshold:0.12});
+  revealEls.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
